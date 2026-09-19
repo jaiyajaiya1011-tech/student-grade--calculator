@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Grade Calculator</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <h1>🎓 Student Grade Calculator</h1>
+        <p>Smart Academic Performance & Grade Management System</p>
+    </div>
+</header>
+
+<main class="container">
+
+<section class="card">
+
+    <div class="section-title">
+        <h2>👨‍🎓 Student Information</h2>
+        <p>Enter the student's basic details</p>
+    </div>
+
+    <div class="form-grid">
+
+        <div class="form-group">
+            <label for="studentName">Student Name</label>
+            <input
+                type="text"
+                id="studentName"
+                placeholder="Enter student name"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="registerNumber">Register Number</label>
+            <input
+                type="text"
+                id="registerNumber"
+                placeholder="Enter register number"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="course">Course / Department</label>
+            <input
+                type="text"
+                id="course"
+                placeholder="Example: B.Tech Information Technology"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="semester">Semester</label>
+
+            <select id="semester">
+                <option value="">Select Semester</option>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+            </select>
+        </div>
+
+    </div>
+
+</section>
+<section class="card">
+
+    <div class="section-title">
+        <h2>⚖️ Assessment Weightage</h2>
+        <p>Set the percentage contribution of each assessment</p>
+    </div>
+
+    <div class="weightage-grid">
+
+        <div class="form-group">
+            <label for="examWeight">
+                Exam Weightage (%)
+            </label>
+
+            <input
+                type="number"
+                id="examWeight"
+                value="70"
+                min="0"
+                max="100"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="assignmentWeight">
+                Assignment Weightage (%)
+            </label>
+
+            <input
+                type="number"
+                id="assignmentWeight"
+                value="20"
+                min="0"
+                max="100"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="quizWeight">
+                Quiz Weightage (%)
+            </label>
+
+            <input
+                type="number"
+                id="quizWeight"
+                value="10"
+                min="0"
+                max="100"
+            >
+        </div>
+
+    </div>
+
+    <div id="weightageMessage" class="message"></div>
+
+</section>
+
+
+<section class="card">
+
+    <div class="section-header">
+
+        <div class="section-title">
+            <h2>📚 Subject Marks</h2>
+            <p>Add or remove subjects dynamically</p>
+        </div>
+
+        <button
+            type="button"
+            class="btn btn-primary"
+            id="addSubjectBtn"
+        >
+            ➕ Add Subject
+        </button>
+
+    </div>
+
+    <div class="table-wrapper">
+
+        <table id="subjectsTable">
+
+            <thead>
+
+                <tr>
+                    <th>S.No</th>
+                    <th>Subject Name</th>
+                    <th>Credits</th>
+                    <th>Exam</th>
+                    <th>Assignment</th>
+                    <th>Quiz</th>
+                    <th>Final Mark</th>
+                    <th>Grade</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="subjectTableBody">
+
+                <tr class="subject-row">
+
+                    <td class="serial-number">1</td>
+
+                    <td>
+                        <input
+                            type="text"
+                            class="subject-name"
+                            placeholder="Subject name"
+                        >
+                    </td>
+
+                    <td>
+                        <input
+                            type="number"
+                            class="credits"
+                            placeholder="3"
+                            min="0"
+                            max="10"
+                            step="0.5"
+                        >
+                    </td>
+
+                    <td>
+                        <input
+                            type="number"
+                            class="exam-mark"
+                            placeholder="0-100"
+                            min="0"
+                            max="100"
+                        >
+                    </td>
+
+                    <td>
+                        <input
+                            type="number"
+                            class="assignment-mark"
+                            placeholder="0-100"
+                            min="0"
+                            max="100"
+                        >
+                    </td>
+
+                    <td>
+                        <input
+                            type="number"
+                            class="quiz-mark"
+                            placeholder="0-100"
+                            min="0"
+                            max="100"
+                        >
+                    </td>
+
+                    <td class="final-mark">-</td>
+
+                    <td class="grade">-</td>
+
+                    <td class="status">-</td>
+
+                    <td>
+                        <button
+                            type="button"
+                            class="delete-btn"
+                            onclick="deleteSubject(this)"
+                        >
+                            🗑️
+                        </button>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div id="validationMessage" class="error-message"></div>
+
+</section>
+<section class="actions">
+
+    <button
+        type="button"
+        class="btn btn-success"
+        id="calculateBtn"
+    >
+        🧮 Calculate Result
+    </button>
+
+    <button
+        type="button"
+        class="btn btn-secondary"
+        id="resetBtn"
+    >
+        🔄 Clear & Reset
+    </button>
+
+</section>
+
+
+<section class="card result-section" id="resultSection">
+
+    <div class="section-title">
+        <h2>📊 Academic Result</h2>
+        <p>Overall performance summary</p>
+    </div>
+
+    <div class="result-grid">
+
+        <div class="result-card">
+            <span class="result-icon">📝</span>
+            <h3>Total Marks</h3>
+            <p id="totalMarks">0</p>
+            <small>Maximum Marks</small>
+        </div>
+
+        <div class="result-card">
+            <span class="result-icon">📈</span>
+            <h3>Percentage</h3>
+            <p id="percentage">0%</p>
+            <small>Overall Percentage</small>
+        </div>
+
+        <div class="result-card">
+            <span class="result-icon">🏆</span>
+            <h3>Overall Grade</h3>
+            <p id="overallGrade">-</p>
+            <small>Final Grade</small>
+        </div>
+
+        <div class="result-card">
+            <span class="result-icon">🎯</span>
+            <h3>GPA</h3>
+            <p id="gpa">0.00</p>
+            <small>Grade Point Average</small>
+        </div>
+
+        <div class="result-card">
+            <span class="result-icon">📚</span>
+            <h3>CGPA</h3>
+            <p id="cgpa">0.00</p>
+            <small>Cumulative GPA</small>
+        </div>
+
+        <div class="result-card">
+            <span class="result-icon">✅</span>
+            <h3>Status</h3>
+            <p id="overallStatus">-</p>
+            <small>Pass / Fail</small>
+        </div>
+
+    </div>
+
+    <div class="remarks-card">
+
+        <h3>💬 Performance Remarks</h3>
+
+        <p id="remarks">
+            Calculate your result to view performance remarks.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="card">
+
+    <div class="section-title">
+
+        <h2>🎯 What-If Analysis</h2>
+
+        <p>
+            Find the marks required to achieve your target percentage
+        </p>
+
+    </div>
+
+    <div class="what-if-grid">
+
+        <div class="form-group">
+
+            <label for="targetPercentage">
+                Target Percentage (%)
+            </label>
+
+            <input
+                type="number"
+                id="targetPercentage"
+                placeholder="Example: 85"
+                min="0"
+                max="100"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="completedPercentage">
+                Current Percentage (%)
+            </label>
+
+            <input
+                type="number"
+                id="completedPercentage"
+                placeholder="Auto calculated"
+                readonly
+            >
+
+        </div>
+
+    </div>
+
+    <button
+        type="button"
+        class="btn btn-primary"
+        id="whatIfBtn"
+    >
+        🔮 Calculate Required Marks
+    </button>
+
+    <div
+        class="what-if-result"
+        id="whatIfResult"
+    >
+        Enter your target percentage to see the required marks.
+    </div>
+
+</section>
+<section class="card chart-section">
+
+    <div class="section-title">
+        <h2>📊 Performance Visualization</h2>
+        <p>Visual representation of subject-wise performance</p>
+    </div>
+
+    <div class="charts-container">
+
+        <div class="chart-box">
+
+            <h3>Subject-wise Marks</h3>
+
+            <canvas id="marksChart"></canvas>
+
+        </div>
+
+        <div class="chart-box">
+
+            <h3>Grade Distribution</h3>
+
+            <canvas id="gradeChart"></canvas>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="card">
+
+    <div class="section-title">
+
+        <h2>🎓 GPA & CGPA Calculator</h2>
+
+        <p>
+            GPA is calculated using subject credits and grade points.
+        </p>
+
+    </div>
+
+    <div class="gpa-info">
+
+        <div class="info-box">
+
+            <strong>GPA</strong>
+
+            <span>
+                Σ (Credit × Grade Point) ÷ Σ Credits
+            </span>
+
+        </div>
+
+        <div class="info-box">
+
+            <strong>CGPA</strong>
+
+            <span>
+                Average of all semester GPAs
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="card report-section">
+
+    <div class="section-title">
+
+        <h2>📄 Download Report</h2>
+
+        <p>
+            Generate a professional student marksheet.
+        </p>
+
+    </div>
+
+    <div class="report-buttons">
+
+        <button
+            type="button"
+            class="btn btn-success"
+            id="downloadPdfBtn"
+        >
+            📥 Download PDF Marksheet
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-primary"
+            id="saveResultBtn"
+        >
+            💾 Save Result
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="card">
+
+    <div class="section-header">
+
+        <div class="section-title">
+
+            <h2>🕒 Result History</h2>
+
+            <p>
+                Previously saved student results
+            </p>
+
+        </div>
+
+        <button
+            type="button"
+            class="btn btn-danger"
+            id="clearHistoryBtn"
+        >
+            🗑️ Clear History
+        </button>
+
+    </div>
+
+    <div
+        class="history-container"
+        id="historyContainer"
+    >
+
+        <p class="empty-history">
+            No saved results yet.
+        </p>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+    <p>
+        🎓 Student Grade Calculator
+    </p>
+
+    <p>
+        Smart Academic Performance Management System
+    </p>
+
+    <p>
+        © 2026 All Rights Reserved
+    </p>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
