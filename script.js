@@ -1,26 +1,43 @@
-function calculateResult() {
+function calculateGrade() {
     const name = document.getElementById("studentName").value.trim();
 
-    const mark1 = Number(document.getElementById("mark1").value);
-    const mark2 = Number(document.getElementById("mark2").value);
-    const mark3 = Number(document.getElementById("mark3").value);
-    const mark4 = Number(document.getElementById("mark4").value);
-    const mark5 = Number(document.getElementById("mark5").value);
+    const mark1 = parseFloat(document.getElementById("mark1").value);
+    const mark2 = parseFloat(document.getElementById("mark2").value);
+    const mark3 = parseFloat(document.getElementById("mark3").value);
+    const mark4 = parseFloat(document.getElementById("mark4").value);
+    const mark5 = parseFloat(document.getElementById("mark5").value);
+
+    const resultBox = document.getElementById("result");
 
     if (name === "") {
         alert("Please enter student name.");
         return;
     }
 
-    const marks = [mark1, mark2, mark3, mark4, mark5];
+    if (
+        isNaN(mark1) ||
+        isNaN(mark2) ||
+        isNaN(mark3) ||
+        isNaN(mark4) ||
+        isNaN(mark5)
+    ) {
+        alert("Please enter all subject marks.");
+        return;
+    }
 
-    if (marks.some(mark => isNaN(mark) || mark < 0 || mark > 100)) {
-        alert("Please enter valid marks between 0 and 100.");
+    if (
+        mark1 < 0 || mark1 > 100 ||
+        mark2 < 0 || mark2 > 100 ||
+        mark3 < 0 || mark3 > 100 ||
+        mark4 < 0 || mark4 > 100 ||
+        mark5 < 0 || mark5 > 100
+    ) {
+        alert("Marks must be between 0 and 100.");
         return;
     }
 
     const total = mark1 + mark2 + mark3 + mark4 + mark5;
-    const percentage = total / 5;
+    const percentage = (total / 500) * 100;
 
     let grade;
 
@@ -38,74 +55,27 @@ function calculateResult() {
         grade = "F";
     }
 
-    const result = marks.every(mark => mark >= 35)
-        ? "PASS"
-        : "FAIL";
+    let result;
 
-    document.getElementById("resultName").textContent = name;
-    document.getElementById("totalMarks").textContent = total;
-    document.getElementById("percentage").textContent =
-        percentage.toFixed(2) + "%";
-    document.getElementById("grade").textContent = grade;
-    document.getElementById("resultStatus").textContent = result;
-
-    document.getElementById("resultSection").classList.remove("hidden");
-
-    const statusElement = document.getElementById("resultStatus");
-
-    statusElement.classList.remove("pass", "fail");
-
-    if (result === "PASS") {
-        statusElement.classList.add("pass");
+    if (
+        mark1 >= 35 &&
+        mark2 >= 35 &&
+        mark3 >= 35 &&
+        mark4 >= 35 &&
+        mark5 >= 35
+    ) {
+        result = "PASS";
     } else {
-        statusElement.classList.add("fail");
+        result = "FAIL";
     }
-}
 
-function resetForm() {
-    document.getElementById("gradeForm").reset();
-    document.getElementById("resultSection").classList.add("hidden");
-}
-document.getElementById("gradeForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    calculateResult();
-});
-document.addEventListener("DOMContentLoaded", function() {
-    const resultSection = document.getElementById("resultSection");
+    resultBox.style.display = "block";
 
-    if (resultSection) {
-        resultSection.classList.add("hidden");
+    resultBox.innerHTML =
+        "<h2>Student Result</h2>" +
+        "<strong>Student Name:</strong> " + name + "<br>" +
+        "<strong>Total Marks:</strong> " + total + " / 500<br>" +
+        "<strong>Percentage:</strong> " + percentage.toFixed(2) + "%<br>" +
+        "<strong>Grade:</strong> " + grade + "<br>" +
+        "<strong>Result:</strong> " + result;
     }
-});
-document.getElementById("resetBtn").addEventListener("click", function() {
-    resetForm();
-});
-const markInputs = document.querySelectorAll(".mark-input");
-
-markInputs.forEach(function(input) {
-    input.addEventListener("input", function() {
-        if (this.value > 100) {
-            this.value = 100;
-        }
-
-        if (this.value < 0) {
-            this.value = 0;
-        }
-    });
-});
-document.querySelectorAll("#gradeForm input").forEach(function(input) {
-    input.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            calculateResult();
-        }
-    });
-});
-window.addEventListener("load", function() {
-    const studentName = document.getElementById("studentName");
-
-    if (studentName) {
-        studentName.focus();
-    }
-});
-console.log("Student Grade Calculator loaded successfully!");
